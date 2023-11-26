@@ -4,6 +4,7 @@ import com.Shubhamsingh.WeatherPrediction.model.CurrentWeather;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -25,32 +26,58 @@ public class TemperatureHelper {
      * @param currentWeather The CurrentWeather object to update with temperature extremes.
      */
     public static void getTemperatureExtremes(String date, JsonArray weatherList, CurrentWeather currentWeather) {
-        double globalLowTemperature = Double.MAX_VALUE;
-        double globalHighTemperature = Double.MIN_VALUE;
+        double globalLowTemperature = Double.POSITIVE_INFINITY;
+        double globalHighTemperature = Double.NEGATIVE_INFINITY;
 
         try {
-
             for (JsonElement weatherListElement : weatherList) {
                 JsonObject weatherData = weatherListElement.getAsJsonObject();
                 String currentDateData = DateHelper.formatEpochSecondToDate(weatherData.getAsJsonPrimitive("dt").getAsLong());
 
                 if (currentDateData.equals(date)) {
-                    double tempHigh = weatherData.getAsJsonObject("main").getAsJsonPrimitive("temp_max").getAsDouble() - KELVIN_TO_CELSIUS_CONVERSION;
-                    double tempLow = weatherData.getAsJsonObject("main").getAsJsonPrimitive("temp_min").getAsDouble() - KELVIN_TO_CELSIUS_CONVERSION;
+                    Double tempMax = getTemperature(weatherData.getAsJsonObject("main"), "temp_max");
+                    Double tempMin = getTemperature(weatherData.getAsJsonObject("main"), "temp_min");
 
-                    globalLowTemperature = Math.min(globalLowTemperature, tempLow);
-                    globalHighTemperature = Math.max(globalHighTemperature, tempHigh);
+                    if (tempMax != null && tempMin != null) {
+                        double tempHigh = tempMax - KELVIN_TO_CELSIUS_CONVERSION;
+                        double tempLow = tempMin - KELVIN_TO_CELSIUS_CONVERSION;
+
+                        globalLowTemperature = Math.min(globalLowTemperature, tempLow);
+                        globalHighTemperature = Math.max(globalHighTemperature, tempHigh);
+                    } else {
+                        LOGGER.warn("Temperature data is null or invalid for date: {}", date);
+                    }
                 }
             }
 
-            currentWeather.setTemperatureLowForTheDay(roundTemperature(globalLowTemperature));
-            currentWeather.setTemperatureHighForTheDay(roundTemperature(globalHighTemperature));
-        }catch (Exception e) {
-            // Log the exception using Log4j
+            if (globalLowTemperature != Double.POSITIVE_INFINITY && globalHighTemperature != Double.NEGATIVE_INFINITY) {
+                currentWeather.setTemperatureLowForTheDay(roundTemperature(globalLowTemperature));
+                currentWeather.setTemperatureHighForTheDay(roundTemperature(globalHighTemperature));
+            } else {
+                LOGGER.warn("No valid temperature data found for date: {}", date);
+            }
+        } catch (Exception e) {
             LOGGER.error("Error while getting temperature extremes", e);
-            // You may choose to throw the exception or handle it accordingly
         }
     }
+
+    private static Double getTemperature(JsonObject jsonObject, String key) {
+        JsonElement jsonElement = jsonObject.get(key);
+
+        if (jsonElement != null && jsonElement.isJsonPrimitive()) {
+            JsonPrimitive jsonPrimitive = jsonElement.getAsJsonPrimitive();
+            if (jsonPrimitive.isNumber()) {
+                return jsonPrimitive.getAsDouble();
+            } else {
+                LOGGER.warn("Invalid temperature format for key: {}", key);
+            }
+        } else {
+            LOGGER.warn("Temperature data is missing for key: {}", key);
+        }
+
+        return null;
+    }
+
 
     /**
      * Rounds the temperature to two decimal places.
@@ -59,7 +86,11 @@ public class TemperatureHelper {
      * @return The rounded temperature.
      */
     private static double roundTemperature(double temperature) {
-        return Math.round(temperature * 100.0) / 100.0; // Rounds to 2 decimal places
+        if (Double.isInfinite(temperature)) {
+            return 0.0;
+        } else {
+            return Math.round(temperature * 100.0) / 100.0; // Rounds to 2 decimal places
+        }
     }
 
 }

@@ -28,9 +28,9 @@ public class DateHelper {
             LocalDate localDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
             return localDate.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
         } catch (Exception e) {
-            // Log the exception using a logging framework (e.g., Log4j)
+
             logger.error("Error while formatting date", e);
-            // Return a default date instead of a string
+            /** Return a default date instead of a string */
             return DEFAULT_DATE.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
         }
     }

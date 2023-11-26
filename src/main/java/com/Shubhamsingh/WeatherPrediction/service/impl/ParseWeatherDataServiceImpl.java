@@ -2,9 +2,9 @@ package com.Shubhamsingh.WeatherPrediction.service.impl;
 
 import com.Shubhamsingh.WeatherPrediction.helper.DateHelper;
 import com.Shubhamsingh.WeatherPrediction.helper.TemperatureHelper;
-import com.Shubhamsingh.WeatherPrediction.helper.WeatherConditionHelper;
 import com.Shubhamsingh.WeatherPrediction.model.CurrentWeather;
 import com.Shubhamsingh.WeatherPrediction.service.ParseWeatherDataService;
+import com.Shubhamsingh.WeatherPrediction.service.WeatherConditionService;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -27,17 +27,18 @@ public class ParseWeatherDataServiceImpl implements ParseWeatherDataService {
     private static final Logger logger = LogManager.getLogger(ParseWeatherDataServiceImpl.class);
 
     // Dependencies
-    private final WeatherConditionHelper weatherConditionHelper;
+    private WeatherConditionService weatherConditionService;
+
+    @Autowired
+    public ParseWeatherDataServiceImpl(WeatherConditionService weatherConditionService) {
+        this.weatherConditionService = weatherConditionService;
+    }
 
     /**
      * Constructor to inject dependencies.
      *
      * @param weatherConditionHelper Helper class for updating weather conditions.
      */
-    @Autowired
-    public ParseWeatherDataServiceImpl(WeatherConditionHelper weatherConditionHelper) {
-        this.weatherConditionHelper = weatherConditionHelper;
-    }
 
     /**
      * Parses the provided JSON weather data and returns a list of CurrentWeather objects.
@@ -74,7 +75,7 @@ public class ParseWeatherDataServiceImpl implements ParseWeatherDataService {
                         TemperatureHelper.getTemperatureExtremes(date, weatherList, currentWeather);
 
                         // Update weather conditions based on the data
-                        weatherConditionHelper.updateWeatherConditions(currentWeather, weatherList);
+                        weatherConditionService.updateWeatherConditions(currentWeather, weatherList);
 
                         // Check if the date has not been visited and the limit is not reached
                         if (!visitedDates.contains(date) && visitedDates.size() < WEATHER_DAYS_TOTAL_COUNT) {
