@@ -9,7 +9,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import jakarta.validation.constraints.NotNull;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Helper class for updating weather conditions based on received weather data.
@@ -29,7 +29,7 @@ public class WeatherConditionServiceImpl implements WeatherConditionService {
 
     @Autowired
     public WeatherConditionServiceImpl(WeatherMessageServiceImpl weatherMessageServiceImpl) {
-        this.weatherMessageServiceImpl = weatherMessageServiceImpl;
+        this.weatherMessageServiceImpl = Objects.requireNonNull(weatherMessageServiceImpl);
     }
 
     /**
@@ -41,6 +41,13 @@ public class WeatherConditionServiceImpl implements WeatherConditionService {
     @Override
     public void updateWeatherConditions(CurrentWeather currentWeather, JsonArray weatherList) {
         try {
+            if (currentWeather == null) {
+                throw new IllegalArgumentException("currentWeather must not be null");
+            }
+            if (weatherList == null) {
+                throw new IllegalArgumentException("weatherList must not be null");
+            }
+
             List<WeatherMessagePrediction> currentDateWeatherMessage = new ArrayList<>();
             for (JsonElement weatherListElement : weatherList) {
                 processWeatherData(currentWeather, currentDateWeatherMessage, weatherListElement.getAsJsonObject());
@@ -55,6 +62,16 @@ public class WeatherConditionServiceImpl implements WeatherConditionService {
     }
 
     private void processWeatherData(CurrentWeather currentWeather, List<WeatherMessagePrediction> currentDateWeatherMessage, JsonObject weatherData) {
+        if (currentWeather == null) {
+            throw new IllegalArgumentException("currentWeather must not be null");
+        }
+        if (currentDateWeatherMessage == null) {
+            throw new IllegalArgumentException("currentDateWeatherMessage must not be null");
+        }
+        if (weatherData == null) {
+            throw new IllegalArgumentException("weatherData must not be null");
+        }
+
         JsonObject mainWeatherData = weatherData.getAsJsonObject("main");
         String extractDtText = TimeHelper.extractTimeFromDateTimeString(weatherData.getAsJsonPrimitive("dt_txt").getAsString());
         Long timestamp = weatherData.getAsJsonPrimitive("dt").getAsLong();
@@ -70,6 +87,16 @@ public class WeatherConditionServiceImpl implements WeatherConditionService {
     }
 
     private void updateCurrentWeatherConditions(CurrentWeather currentWeather, JsonObject mainWeatherData, JsonObject weatherData) {
+        if (currentWeather == null) {
+            throw new IllegalArgumentException("currentWeather must not be null");
+        }
+        if (mainWeatherData == null) {
+            throw new IllegalArgumentException("mainWeatherData must not be null");
+        }
+        if (weatherData == null) {
+            throw new IllegalArgumentException("weatherData must not be null");
+        }
+
         double temperature = mainWeatherData.getAsJsonPrimitive("temp").getAsDouble() - KELVIN_TO_CELSIUS_CONVERSION;
         currentWeather.setSunny(temperature > 40.0);
         JsonArray weather = weatherData.getAsJsonArray("weather");
@@ -83,6 +110,19 @@ public class WeatherConditionServiceImpl implements WeatherConditionService {
     }
 
     private void setWeatherMessageAndResetConditions(CurrentWeather currentWeather, List<WeatherMessagePrediction> currentDateWeatherMessage, String extractDtText, WeatherMessagePrediction weatherMessagePrediction) {
+        if (currentWeather == null) {
+            throw new IllegalArgumentException("currentWeather must not be null");
+        }
+        if (currentDateWeatherMessage == null) {
+            throw new IllegalArgumentException("currentDateWeatherMessage must not be null");
+        }
+        if (extractDtText == null) {
+            throw new IllegalArgumentException("extractDtText must not be null");
+        }
+        if (weatherMessagePrediction == null) {
+            throw new IllegalArgumentException("weatherMessagePrediction must not be null");
+        }
+
         weatherMessagePrediction.setPredictionTimestamp(extractDtText);
         weatherMessageServiceImpl.setWeatherMessage(currentWeather, weatherMessagePrediction);
         currentWeather.resetConditions();

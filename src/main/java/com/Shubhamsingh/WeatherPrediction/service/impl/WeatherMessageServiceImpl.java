@@ -16,7 +16,6 @@ import java.util.stream.Stream;
 @Service
 public class WeatherMessageServiceImpl implements WeatherMessageService {
 
-    // Logger for logging events
     private static final Logger logger = LogManager.getLogger(WeatherMessageServiceImpl.class);
 
     /**
@@ -32,20 +31,18 @@ public class WeatherMessageServiceImpl implements WeatherMessageService {
         try {
 
             weatherPredictionMessage = Stream.of(
-                            currentWeather.getWindy() ? "It’s too windy, watch out! " : "",
-                            currentWeather.getStormy() ? "Don’t step out! A Storm is brewing! " : "",
-                            currentWeather.getRainy() ? "Carry an umbrella. " : "",
-                            currentWeather.getSunny() ? "Use sunscreen lotion. " : "",
-                            !currentWeather.hasAnyCondition() ? "Weather conditions are normal. " : "")
+                            currentWeather.getWindy() ? WINDY_MESSAGE : "",
+                            currentWeather.getStormy() ? STORMY_MESSAGE : "",
+                            currentWeather.getRainy() ? RAINY_MESSAGE : "",
+                            currentWeather.getSunny() ? SUNNY_MESSAGE : "",
+                            !currentWeather.hasAnyCondition() ? NORMAL_CONDITION_MESSAGE : "")
                     .collect(Collectors.joining());
 
             weatherMessagePrediction.setNotificationMessage(weatherPredictionMessage);
 
         } catch (Exception e) {
-            // Log the exception using Log4j
             logger.error("Error while setting weather message for currentWeather: {}", currentWeather, e);
 
-            // You may throw a custom exception or handle it as per your application's needs
             throw new RuntimeException("Error while setting weather message", e);
         }
     }

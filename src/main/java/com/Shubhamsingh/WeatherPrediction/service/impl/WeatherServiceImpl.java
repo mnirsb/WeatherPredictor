@@ -60,12 +60,9 @@ public class WeatherServiceImpl implements WeatherService {
 
                 return fetchedData;
             } else {
-                // Throw a SpecificAPIError for an invalid city name
                 throw new SpecificAPIError("Invalid city name provided: " + cityName);
             }
         } catch (Exception e) {
-            // Handle the case when the external API is not available
-            // Log the exception or take appropriate action based on your requirements
 
             // Return the data from the cache
             return new ArrayList<>(weatherDataCache);
@@ -79,8 +76,6 @@ public class WeatherServiceImpl implements WeatherService {
      */
     @Override
     public List<CurrentWeather> getSampleWeatherData() {
-        // Return sample data when in offline mode
-        // Implement your sample data generation logic here
         if (weatherDataCache.isEmpty()) {
             return SampleWeatherData.getSampleCurrentWeather();
         }

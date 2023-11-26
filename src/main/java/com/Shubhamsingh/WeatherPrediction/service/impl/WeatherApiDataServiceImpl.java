@@ -19,7 +19,6 @@ import java.io.IOException;
 @Service
 public class WeatherApiDataServiceImpl implements WeatherApiDataService {
 
-    // Logger for logging events
     private static final Logger logger = LogManager.getLogger(WeatherApiDataServiceImpl.class);
 
     // Cached JSON data
@@ -56,7 +55,6 @@ public class WeatherApiDataServiceImpl implements WeatherApiDataService {
 
                 return ResponseEntity.ok(jsonData);
             } else {
-                // Log error using Log4j
                 logger.error("Error: {}", response.code());
 
                 // Check if the error is due to an incorrect city name
@@ -64,14 +62,11 @@ public class WeatherApiDataServiceImpl implements WeatherApiDataService {
                     throw new SpecificAPIError("City not found");
                 }
 
-                // Handle other status codes by returning an appropriate response
                 return ResponseEntity.status(response.code()).body(null);
             }
         } catch (IOException e) {
-            // Log the exception using Log4j
             logger.error("An error occurred while fetching weather data", e);
 
-            // Return an internal server error response
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }

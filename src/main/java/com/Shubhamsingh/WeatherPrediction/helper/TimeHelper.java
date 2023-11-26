@@ -32,7 +32,6 @@ public class TimeHelper {
             // Extract the time portion
             return dateTime.toLocalTime().toString();
         }catch (Exception e) {
-            // Log the exception using a logging framework (e.g., Log4j)
             LOGGER.error("Error while formatting Time", e);
             // Return a default date instead of a string
             return DEFAULT_TIME.toString();

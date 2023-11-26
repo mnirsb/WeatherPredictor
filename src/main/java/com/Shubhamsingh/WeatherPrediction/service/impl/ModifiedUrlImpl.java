@@ -30,9 +30,7 @@ public class ModifiedUrlImpl implements ModifiedUrl {
         try {
             return String.format(weatherDataApiTemplate, cityName, apiKey, forecastCount);
         } catch (Exception e) {
-            // Log the exception using Log4j
             logger.error("An error occurred while constructing the weather data URL", e);
-            // Propagate the exception or handle it based on your application's requirements
             return null;
         }
     }

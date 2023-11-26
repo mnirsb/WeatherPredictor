@@ -35,12 +35,6 @@ public class ParseWeatherDataServiceImpl implements ParseWeatherDataService {
     }
 
     /**
-     * Constructor to inject dependencies.
-     *
-     * @param weatherConditionHelper Helper class for updating weather conditions.
-     */
-
-    /**
      * Parses the provided JSON weather data and returns a list of CurrentWeather objects.
      *
      * @param jsonData JSON representation of weather data.
@@ -86,7 +80,6 @@ public class ParseWeatherDataServiceImpl implements ParseWeatherDataService {
                 }
             }
         } catch (Exception e) {
-            // Log the exception using Log4j
             logger.error("An error occurred while parsing weather data", e);
         }
 

@@ -3,20 +3,17 @@ import com.Shubhamsingh.WeatherPrediction.exception.SpecificAPIError;
 import com.Shubhamsingh.WeatherPrediction.helper.OfflineModeConfig;
 import com.Shubhamsingh.WeatherPrediction.model.CurrentWeather;
 import com.Shubhamsingh.WeatherPrediction.service.WeatherService;
-import com.Shubhamsingh.WeatherPrediction.service.impl.WeatherServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/")
 public class WeatherController {
 
     private static final Logger logger = LogManager.getLogger(WeatherController.class);
@@ -24,7 +21,7 @@ public class WeatherController {
     private final WeatherService weatherService;
     private final OfflineModeConfig offlineModeConfig;
 
-    public WeatherController(WeatherServiceImpl weatherService, OfflineModeConfig offlineModeConfig) {
+    public WeatherController(WeatherService weatherService, OfflineModeConfig offlineModeConfig) {
         this.weatherService = weatherService;
         this.offlineModeConfig = offlineModeConfig;
     }
