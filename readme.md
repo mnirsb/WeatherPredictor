@@ -1,93 +1,111 @@
+# Weather Prediction App
 
-Weather Prediction App
-Overview
+## Overview
+
 Welcome to the Weather Prediction App, a Java-based masterpiece crafted on the Spring Boot framework, tailored to deliver pinpoint accurate weather data for your chosen city. Dive into the core of this project, where an ensemble of classes collaboratively fetches, parses, and crafts weather predictions from data pulled from a third-party API.
 
-Contents
-WeatherController
-ModifiedUrlImpl
-ParseWeatherDataServiceImpl
-WeatherApiDataServiceImpl
-WeatherConditionServiceImpl
-WeatherMessageServiceImpl
-WeatherServiceImpl
-DateHelper
-OfflineModeConfig
-SampleWeatherData
-TemperatureHelper
-TimeHelper
-CurrentWeather
-WeatherMessagePrediction
-WeatherController
-The WeatherController - your gateway to handling HTTP requests with swagger. It flaunts two endpoints:
+## Contents
 
-GET /toggleOfflineMode: A toggle switch for the application's offline mode.
-GET /weathers/{cityName}: A treasure trove of weather data for the city of your dreams.
-ModifiedUrlImpl
-Behold the ModifiedUrlImpl class, the maestro orchestrating a dynamic dance of constructing URLs based on city names. It curates the perfect URL for harvesting weather data, incorporating secret ingredients like API keys and forecast counts.
+1. **WeatherController**
+2. **ModifiedUrlImpl**
+3. **ParseWeatherDataServiceImpl**
+4. **WeatherApiDataServiceImpl**
+5. **WeatherConditionServiceImpl**
+6. **WeatherMessageServiceImpl**
+7. **WeatherServiceImpl**
+8. **DateHelper**
+9. **OfflineModeConfig**
+10. **SampleWeatherData**
+11. **TemperatureHelper**
+12. **TimeHelper**
+13. **CurrentWeather**
+14. **WeatherMessagePrediction**
 
-ParseWeatherDataServiceImpl
-Meet the conductor, the ParseWeatherDataServiceImpl class, transforming raw JSON data from the API into a symphony of CurrentWeather objects, each narrating the atmospheric tale for specific dates.
+## WeatherController
 
-WeatherApiDataServiceImpl
-The WeatherApiDataServiceImpl – a virtuoso wielding the OkHttp wand, fetching weather data with grace. It plays judge to responses, checks for errors, and casts spells to handle JSON data. A SpecificAPIError emerges if the city is playing hide-and-seek.
+The `WeatherController` - your gateway to handling HTTP requests with swagger. It flaunts two endpoints:
 
-WeatherConditionServiceImpl
-Enter the maestro, the WeatherConditionServiceImpl class, composing weather conditions for a specific date based on the celestial revelations from the API. Collaborating with helpers, it paints vivid imagery onto the canvas of the CurrentWeather object.
+- **GET /toggleOfflineMode:** A toggle switch for the application's offline mode.
+- **GET /weathers/{cityName}:** A treasure trove of weather data for the city of your dreams.
 
-WeatherMessageServiceImpl
-The WeatherMessageServiceImpl - a poet in the digital realm. It composes a lyrical notification message based on the weather's mood—whispers of wind, tantrums of storms, soothing rains, or the brilliance of sunshine.
+## ModifiedUrlImpl
 
-WeatherServiceImpl
-The grand conductor, the WeatherServiceImpl, harmonizes the entire symphony. It orchestrates the dance between ModifiedUrl, WeatherApiDataService, and ParseWeatherDataService to serenade you with weather data. In offline mode, it gracefully presents sample data.
+Behold the `ModifiedUrlImpl` class, the maestro orchestrating a dynamic dance of constructing URLs based on city names. It curates the perfect URL for harvesting weather data, incorporating secret ingredients like API keys and forecast counts.
 
-DateHelper
-Marvel at the DateHelper – a time-travel guide for date-related operations. It effortlessly transforms epoch seconds into formatted date strings.
+## ParseWeatherDataServiceImpl
 
-OfflineModeConfig
-Behold the OfflineModeConfig, a configuration wizard managing the elusive offline mode. It bestows upon you methods to check and set the mystical offline mode status.
+Meet the conductor, the `ParseWeatherDataServiceImpl` class, transforming raw JSON data from the API into a symphony of `CurrentWeather` objects, each narrating the atmospheric tale for specific dates.
 
-SampleWeatherData
-Meet the SampleWeatherData, generously offering you a taste of its weather message predictions and current weather conditions.
+## WeatherApiDataServiceImpl
 
-TemperatureHelper
-The TemperatureHelper, an expert sculptor carving temperature extremes from the raw material of weather data.
+The `WeatherApiDataServiceImpl` – a virtuoso wielding the OkHttp wand, fetching weather data with grace. It plays judge to responses, checks for errors, and casts spells to handle JSON data. A `SpecificAPIError` emerges if the city is playing hide-and-seek.
 
-TimeHelper
-The TimeHelper, a time-bending magician extracting the essence of time from date-time strings.
+## WeatherConditionServiceImpl
 
-CurrentWeather
-Gaze upon the CurrentWeather, the sentinel standing guard over the current weather conditions for a specific date. It embodies methods for initiation, reset, and a keen eye for weather checks.
+Enter the maestro, the `WeatherConditionServiceImpl` class, composing weather conditions for a specific date based on the celestial revelations from the API. Collaborating with helpers, it paints vivid imagery onto the canvas of the `CurrentWeather` object.
 
-WeatherMessagePrediction
-Finally, the WeatherMessagePrediction – a harbinger of poetic weather prophecies. With timestamped precision, it weaves a notification message that echoes through the digital winds.
+## WeatherMessageServiceImpl
 
-Flow Chart
-Weather Prediction App Flow Chart
+The `WeatherMessageServiceImpl` - a poet in the digital realm. It composes a lyrical notification message based on the weather's mood—whispers of wind, tantrums of storms, soothing rains, or the brilliance of sunshine.
 
-Client Request:
+## WeatherServiceImpl
 
-The client beckons, toggling offline mode or summoning weather data for a city.
-Weather Controller:
+The grand conductor, the `WeatherServiceImpl`, harmonizes the entire symphony. It orchestrates the dance between `ModifiedUrl`, `WeatherApiDataService`, and `ParseWeatherDataService` to serenade you with weather data. In offline mode, it gracefully presents sample data.
 
-The WeatherController takes center stage, directing the request to the rightful method.
-Toggle Offline Mode:
+## DateHelper
 
-The WeatherController adjusts the sails, updating the offline mode configuration.
-Fetch Weather Data:
+Marvel at the `DateHelper` – a time-travel guide for date-related operations. It effortlessly transforms epoch seconds into formatted date strings.
 
-The WeatherController orchestrates with the WeatherServiceImpl to retrieve weather data.
-Modified URL and API Data Fetching:
+## OfflineModeConfig
 
-The WeatherServiceImpl wields the ModifiedUrl to construct the API URL and fetches data using the WeatherApiDataService.
-JSON Data Parsing:
+Behold the `OfflineModeConfig`, a configuration wizard managing the elusive offline mode. It bestows upon you methods to check and set the mystical offline mode status.
 
-The ParseWeatherDataService transforms JSON data into a chorus of CurrentWeather objects.
-Weather Conditions and Messaging:
+## SampleWeatherData
 
-The WeatherConditionServiceImpl paints weather conditions, and the WeatherMessageServiceImpl crafts poetic messages.
-Response:
+Meet the `SampleWeatherData`, generously offering you a taste of its weather message predictions and current weather conditions.
 
-The grand finale – weather data or status cascades back as an HTTP response to the client.
-Conclusion
+## TemperatureHelper
+
+The `TemperatureHelper`, an expert sculptor carving temperature extremes from the raw material of weather data.
+
+## TimeHelper
+
+The `TimeHelper`, a time-bending magician extracting the essence of time from date-time strings.
+
+## CurrentWeather
+
+Gaze upon the `CurrentWeather`, the sentinel standing guard over the current weather conditions for a specific date. It embodies methods for initiation, reset, and a keen eye for weather checks.
+
+## WeatherMessagePrediction
+
+Finally, the `WeatherMessagePrediction` – a harbinger of poetic weather prophecies. With timestamped precision, it weaves a notification message that echoes through the digital winds.
+
+## Flow Chart
+
+1. **Client Request:**
+   - The client beckons, toggling offline mode or summoning weather data for a city.
+
+2. **Weather Controller:**
+   - The `WeatherController` takes center stage, directing the request to the rightful method.
+
+3. **Toggle Offline Mode:**
+   - The `WeatherController` adjusts the sails, updating the offline mode configuration.
+
+4. **Fetch Weather Data:**
+   - The `WeatherController` orchestrates with the `WeatherServiceImpl` to retrieve weather data.
+
+5. **Modified URL and API Data Fetching:**
+   - The `WeatherServiceImpl` wields the `ModifiedUrl` to construct the API URL and fetches data using the `WeatherApiDataService`.
+
+6. **JSON Data Parsing:**
+   - The `ParseWeatherDataService` transforms JSON data into a chorus of `CurrentWeather` objects.
+
+7. **Weather Conditions and Messaging:**
+   - The `WeatherConditionServiceImpl` paints weather conditions, and the `WeatherMessageServiceImpl` crafts poetic messages.
+
+8. **Response:**
+   - The grand finale – weather data or status cascades back as an HTTP response to the client.
+
+## Conclusion
+
 The Weather Prediction App, a symphony of modularity and organization, elegantly dances through the clouds of weather-related functionalities. Powered by the Spring Boot framework, it stands as a robust and scalable creation, perfectly suited for the challenges of real-world weather prediction applications.
