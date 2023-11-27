@@ -50,8 +50,6 @@ public class WeatherApiDataServiceImpl implements WeatherApiDataService {
                 // Extract JSON data from the response
                 jsonData = response.body().string();
 
-                // Process the JSON data as needed
-                System.out.println(jsonData);
 
                 return ResponseEntity.ok(jsonData);
             } else {

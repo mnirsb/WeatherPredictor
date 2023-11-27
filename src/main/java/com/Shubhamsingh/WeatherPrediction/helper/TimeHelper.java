@@ -25,15 +25,20 @@ public class TimeHelper {
      * @return The extracted time as a string.
      */
     public static String extractTimeFromDateTimeString(String dateTimeString) {
-        try{
+        try {
+            if (dateTimeString == null) {
+                LOGGER.warn("DateTimeString is null. Returning default time.");
+                return DEFAULT_TIME.toString();
+            }
+
             // Parse the string to LocalDateTime
             LocalDateTime dateTime = LocalDateTime.parse(dateTimeString, DateTimeFormatter.ofPattern(TIMESTAMP_FORMAT));
 
             // Extract the time portion
             return dateTime.toLocalTime().toString();
-        }catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.error("Error while formatting Time", e);
-            // Return a default date instead of a string
+            // Return a default time instead of a string
             return DEFAULT_TIME.toString();
         }
     }

@@ -5,10 +5,7 @@ import com.Shubhamsingh.WeatherPrediction.helper.TemperatureHelper;
 import com.Shubhamsingh.WeatherPrediction.model.CurrentWeather;
 import com.Shubhamsingh.WeatherPrediction.service.ParseWeatherDataService;
 import com.Shubhamsingh.WeatherPrediction.service.WeatherConditionService;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,30 +48,35 @@ public class ParseWeatherDataServiceImpl implements ParseWeatherDataService {
                 JsonElement jsonElement = JsonParser.parseString(jsonData);
 
                 // Check if the top-level structure is a JSON object
-                if (jsonElement.isJsonObject()) {
+                if (jsonElement != null && jsonElement.isJsonObject()) {
                     JsonObject jsonObject = jsonElement.getAsJsonObject();
                     JsonArray weatherList = jsonObject.getAsJsonArray("list");
 
                     // Iterate through weather data elements
-                    for (JsonElement weatherListElement : weatherList) {
-                        CurrentWeather currentWeather = new CurrentWeather();
-                        JsonObject weatherData = weatherListElement.getAsJsonObject();
+                    if (weatherList != null) {
+                        for (JsonElement weatherListElement : weatherList) {
+                            CurrentWeather currentWeather = new CurrentWeather();
+                            JsonObject weatherData = weatherListElement.getAsJsonObject();
 
-                        // Extract timestamp and format it to obtain the date
-                        Long timestamp = weatherData.getAsJsonPrimitive("dt").getAsLong();
-                        String date = DateHelper.formatEpochSecondToDate(timestamp);
-                        currentWeather.setCompleteDate(date);
+                            // Extract timestamp and format it to obtain the date
+                            JsonPrimitive timestampJson = weatherData.getAsJsonPrimitive("dt");
+                            if (timestampJson != null) {
+                                Long timestamp = timestampJson.getAsLong();
+                                String date = DateHelper.formatEpochSecondToDate(timestamp);
+                                currentWeather.setCompleteDate(date);
 
-                        // Get temperature extremes for the day
-                        TemperatureHelper.getTemperatureExtremes(date, weatherList, currentWeather);
+                                // Get temperature extremes for the day
+                                TemperatureHelper.getTemperatureExtremes(date, weatherList, currentWeather);
 
-                        // Update weather conditions based on the data
-                        weatherConditionService.updateWeatherConditions(currentWeather, weatherList);
+                                // Update weather conditions based on the data
+                                weatherConditionService.updateWeatherConditions(currentWeather, weatherList);
 
-                        // Check if the date has not been visited and the limit is not reached
-                        if (!visitedDates.contains(date) && visitedDates.size() < WEATHER_DAYS_TOTAL_COUNT) {
-                            filledDates.add(currentWeather);
-                            visitedDates.add(date);
+                                // Check if the date has not been visited and the limit is not reached
+                                if (date != null && !visitedDates.contains(date) && visitedDates.size() < WEATHER_DAYS_TOTAL_COUNT) {
+                                    filledDates.add(currentWeather);
+                                    visitedDates.add(date);
+                                }
+                            }
                         }
                     }
                 }
@@ -85,4 +87,5 @@ public class ParseWeatherDataServiceImpl implements ParseWeatherDataService {
 
         return filledDates;
     }
+
 }

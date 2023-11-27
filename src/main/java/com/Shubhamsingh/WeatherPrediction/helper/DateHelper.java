@@ -24,14 +24,18 @@ public class DateHelper {
      */
     public static String formatEpochSecondToDate(Long timeStamp) {
         try {
+            if (timeStamp == null) {
+                logger.warn("Timestamp is null. Returning default date.");
+                return DEFAULT_DATE.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
+            }
+
             Instant instant = Instant.ofEpochSecond(timeStamp);
             LocalDate localDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
             return localDate.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
         } catch (Exception e) {
-
             logger.error("Error while formatting date", e);
-            /** Return a default date instead of a string */
             return DEFAULT_DATE.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
         }
     }
+
 }
