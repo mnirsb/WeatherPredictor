@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     options {
-        timeout(time: 1, unit: 'HOURS') // Set a maximum runtime for the pipeline
-        timestamps() // Display timestamps in the console output
-        buildDiscarder(logRotator(numToKeepStr: '10')) // Keep a maximum of 10 builds
+        timeout(time: 1, unit: 'HOURS')
+        timestamps()
+        buildDiscarder(logRotator(numToKeepStr: '10'))
     }
 
     environment {

@@ -91,6 +91,7 @@ Finally, the `WeatherMessagePrediction` – a harbinger of poetic weather prophe
 3. **Toggle Offline Mode:**
    - The `WeatherController` adjusts the sails, updating the offline mode configuration.
 
+
 4. **Fetch Weather Data:**
    - The `WeatherController` orchestrates with the `WeatherServiceImpl` to retrieve weather data.
 

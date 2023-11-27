@@ -7,6 +7,8 @@ import com.Shubhamsingh.WeatherPrediction.service.ModifiedUrl;
 import com.Shubhamsingh.WeatherPrediction.service.ParseWeatherDataService;
 import com.Shubhamsingh.WeatherPrediction.service.WeatherApiDataService;
 import com.Shubhamsingh.WeatherPrediction.service.WeatherService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 @Service
 public class WeatherServiceImpl implements WeatherService {
+
+    private static final Logger logger = LogManager.getLogger(WeatherServiceImpl.class);
 
     private final ModifiedUrl modifiedUrl;
     private final WeatherApiDataService weatherApiDataService;
@@ -60,10 +64,13 @@ public class WeatherServiceImpl implements WeatherService {
 
                 return fetchedData;
             } else {
+                logger.error("Error response from weather API for city: {}. Status code: {}", cityName, responseEntity.getStatusCode());
                 throw new SpecificAPIError("Invalid city name provided: " + cityName);
+
             }
         } catch (Exception e) {
 
+            logger.error("An error occurred while fetching weather data for city: {}", cityName, e);
             // Return the data from the cache
             return new ArrayList<>(weatherDataCache);
         }
